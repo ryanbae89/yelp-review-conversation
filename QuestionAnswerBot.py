@@ -84,6 +84,7 @@ class ReviewsProcessor(object):
         self.embeddings = {
             idx: self.get_doc_embedding(self.reviews[idx]["comment"].replace("\n", " ")) for idx in self.reviews
         }
+        print("Computed doc embeddings.")
 
     def get_doc_embedding(self, text: str) -> list[float]:
         return self.get_embedding(text, self.embedding_model)
@@ -106,7 +107,7 @@ class ReviewsProcessor(object):
         save_path = os.path.join(review_path, f"{self.place_id}_reviews.json")
         with open(save_path, "w") as f:
             json.dump(self.reviews, f)
-        print(f"Saved downloaded reviews to {save_path}.")
+        print(f"Saved downloaded reviews to {review_path}.")
 
     def save_embeddings(self, embeddings_path):
         """ Method to save the downloaded and formatted reviews to JSON.
@@ -115,7 +116,7 @@ class ReviewsProcessor(object):
         save_path = os.path.join(embeddings_path, f"{self.place_id}_embeddings.json")
         with open(save_path, "w") as f:
             json.dump(self.embeddings, f)
-        print(f"Saved downloaded reviews to {save_path}.")
+        print(f"Saved downloaded reviews to {embeddings_path}.")
 
     def count_tokens(self, text: str) -> int:
         """Count the number of tokens in a string"""
