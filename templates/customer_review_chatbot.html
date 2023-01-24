@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Starter Template - Materialize</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- <link href="./static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
+  <link href="./static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+<body>
+
+<h2>Customer Review QandA Bot</h2>
+
+<p>Have burning questions about a business or a product? Why don't you ask all the customers who have been to the restaurant? Or bought the product?</p>
+
+<br><br>
+
+<form action="/load", method="POST">
+  <label for="cars">Choose a business/product:</label>
+  <select name="biz" id="biz">
+    <option value="yelp-immersion-spa">Yelp - Immersion Spa (Palo Alto, CA)</option>
+    <option value="yelp-wasabi-sushi">Yelp - Wasabi Sushi (Seattle, WA)</option>
+  </select>
+  <br><br>
+  <input type="submit" value="Select"> {{load}}
+</form>
+
+<p>Click the "Select" button and the customer reviews of the selected business/product will load. Then you can start asking questions of the dataset. </p>
+
+<br><br>
+
+<form action="/answer", method="POST">
+  <label for="query">Query:</label>
+  <input type="text" id="query" name="query" placeholder="What was the customers' favorite service?" maxlength="1000" size=100>
+  <input type="submit" value="Ask">
+</form>
+
+<br><br>
+
+{{answer}}
+
+
+</body>
+</html>
