@@ -156,7 +156,7 @@ class Query(object):
         prompt = self.construct_prompt(query)
         
         if show_prompt:
-            print(prompt)
+            print(prompt["prompt"])
 
         COMPLETIONS_API_PARAMS = {    
             # We use temperature of 0.0 because it gives the most predictable, factual answer.
@@ -166,11 +166,13 @@ class Query(object):
             }
 
         response = openai.Completion.create(
-                    prompt=prompt,
+                    prompt=prompt["prompt"],
                     **COMPLETIONS_API_PARAMS
                 )
 
-        return response["choices"][0]["text"].strip(" \n")
+        # return response["choices"][0]["text"].strip(" \n")
+        return {"response": response["choices"][0]["text"].strip(" \n"), "prompt": prompt}
+
 
     def construct_prompt(self, query: str) -> str:
         """
@@ -198,9 +200,13 @@ class Query(object):
         print(f"Selected {len(chosen_sections)} document sections:")
         print("\n".join(chosen_sections_indexes))
         
-        header = """Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say "I don't know."\n\nContext:\n"""
-        
-        return header + "".join(chosen_sections) + "\n\n Q: " + query + "\n A:"
+        header = ("Answer the question as truthfully as possible using the provided context,"
+                   """ and if the answer is not contained within the text below, say "I don't know." """
+                   "Also, output the reviews in the provided context that were most helpful when answering the question."
+                   "\n\nContext:\n")
+
+        return {"prompt": header + "".join(chosen_sections) + "\n\n Q: " + query + "\n A:", "context": "".join(chosen_sections), "header": header}
+        # return header + "".join(chosen_sections) + "\n\n Q: " + query + "\n A:"
    
     def order_document_sections_by_query_similarity(self, query: str) -> list[(float, (str, str))]:
         """

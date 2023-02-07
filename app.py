@@ -25,7 +25,10 @@ def hello_world():
 def load():
     # get business/proudct name
     name = [x for x in request.form.values()][0]
-    place_id = "oBtORnu25mYpaS8eJQY_kQ"
+    place_id_mapping = {"yelp-immersion-spa": "oBtORnu25mYpaS8eJQY_kQ",
+                        "yelp-wasabi-sushi": "cFTq5MmBDPb_VEqQXPw2Dw"}
+    # place_id = "oBtORnu25mYpaS8eJQY_kQ"
+    place_id = place_id_mapping[name]
 
     with open('config.yml', 'r') as file:
         config = yaml.safe_load(file)
@@ -51,7 +54,12 @@ def answer():
     qabot = session.get('qabot', None)
     answer = qabot.answer_query(query, show_prompt=True)
 
-    return render_template('customer_review_chatbot.html', answer=f"{query}\n\n{answer}")
+    # replace newline characters
+    answer["prompt"]["context"] = answer["prompt"]["context"].replace('\n', '<br>')
+
+    return render_template('customer_review_chatbot.html', 
+                           answer=f"{answer['response']}", 
+                           context=f"Context:<br>{answer['prompt']['context']}")
 
 if __name__ == '__main__':
     app.run(debug=True)

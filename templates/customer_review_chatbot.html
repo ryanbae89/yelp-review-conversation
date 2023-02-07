@@ -40,9 +40,11 @@
 </form>
 
 <br><br>
-
+{% autoescape false %}
 {{answer}}
-
+<br><br><br>
+{{context}}
+{% endautoescape %}
 
 </body>
 </html>
